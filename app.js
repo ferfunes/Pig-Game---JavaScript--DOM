@@ -11,15 +11,40 @@ GAME RULES:
 
 /************************* Pig Game ****************************/
 
-let scores, roundScore, activePlayer, dice;
+let scores, roundScore, activePlayer;
 
 scores = [0, 0];
 roundScore = 0;
 activePlayer = 0;
-dice = Math.floor(Math.random() * 7);
-
-//this will print the value of the dice variable on the current player
-document.querySelector("#current-" + activePlayer).textContent = dice;
 
 //This will hide the dice from the game
 document.querySelector(".dice").style.display = "none";
+
+//Setting the values of the scores to 0
+document.getElementById("score-0").textContent = "0";
+document.getElementById("score-1").textContent = "0";
+document.getElementById("current-0").textContent = "0";
+document.getElementById("current-1").textContent = "0";
+
+function btn() {}
+document.querySelector(".btn-roll").addEventListener("click", function() {
+  //1. Random Numnber
+  let dice = Math.floor(Math.random() * 6) + 1;
+
+  //2. Display the Result
+  let diceDOM = document.querySelector(".dice");
+  diceDOM.style.display = "block";
+  diceDOM.src = "dice-" + dice + ".png";
+
+  //3. Update the round score If the rolled number was NOT 1
+  if (dice !== 1) {
+    roundScore += dice;
+    document.querySelector("#current-" + activePlayer).textContent = roundScore;
+  } else {
+    activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+    roundScore = 0;
+
+    document.getElementById("current-0").textContent = "0";
+    document.getElementById("current-1").textContent = "0";
+  }
+});
