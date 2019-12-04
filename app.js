@@ -8,3 +8,18 @@ GAME RULES:
 - The first player to reach 100 points on GLOBAL score wins the game
 
 */
+
+/************************* Pig Game ****************************/
+
+let scores, roundScore, activePlayer, dice;
+
+scores = [0, 0];
+roundScore = 0;
+activePlayer = 0;
+dice = Math.floor(Math.random() * 7);
+
+//this will print the value of the dice variable on the current player
+document.querySelector("#current-" + activePlayer).textContent = dice;
+
+//This will hide the dice from the game
+document.querySelector(".dice").style.display = "none";
