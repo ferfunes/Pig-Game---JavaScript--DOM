@@ -11,54 +11,61 @@ GAME RULES:
 
 /************************* Pig Game ****************************/
 
-let scores, roundScore, activePlayer;
+let scores, roundScore, activePlayer, gamePlaying;
 
 init();
 
 /************************* Event Listener for the roll dice btn **********************/
 
 document.querySelector(".btn-roll").addEventListener("click", function() {
-  //1. Random Numnber
-  let dice = Math.floor(Math.random() * 6) + 1;
+  if (gamePlaying) {
+    //1. Random Numnber
+    let dice = Math.floor(Math.random() * 6) + 1;
 
-  //2. Display the Result
-  let diceDOM = document.querySelector(".dice");
-  diceDOM.style.display = "block";
-  diceDOM.src = "dice-" + dice + ".png";
+    //2. Display the Result
+    let diceDOM = document.querySelector(".dice");
+    diceDOM.style.display = "block";
+    diceDOM.src = "dice-" + dice + ".png";
 
-  //3. Update the round score If the rolled number was NOT 1
-  if (dice !== 1) {
-    roundScore += dice;
-    document.querySelector("#current-" + activePlayer).textContent = roundScore;
-  } else {
-    //next Player
-    nextPlayer();
+    //3. Update the round score If the rolled number was NOT 1
+    if (dice !== 1) {
+      roundScore += dice;
+      document.querySelector(
+        "#current-" + activePlayer
+      ).textContent = roundScore;
+    } else {
+      //next Player
+      nextPlayer();
+    }
   }
 });
 
 /************************* Event Listener for the hold btn **********************/
 
 document.querySelector(".btn-hold").addEventListener("click", function() {
-  //Add current score to global score
-  scores[activePlayer] += roundScore;
+  if (gamePlaying) {
+    //Add current score to global score
+    scores[activePlayer] += roundScore;
 
-  //Update the UI
-  document.querySelector("#score-" + activePlayer).textContent =
-    scores[activePlayer];
+    //Update the UI
+    document.querySelector("#score-" + activePlayer).textContent =
+      scores[activePlayer];
 
-  //Check if player won the game
-  if (scores[activePlayer] >= 20) {
-    document.querySelector("#name-" + activePlayer).textContent = "WINNER!!!";
-    document.querySelector(".dice").style.display = "none";
-    document
-      .querySelector(".player-" + activePlayer + "-panel")
-      .classList.add("winner");
-    document
-      .querySelector(".player-" + activePlayer + "-panel")
-      .classList.remove("active");
-  } else {
-    //Next player
-    nextPlayer();
+    //Check if player won the game
+    if (scores[activePlayer] >= 20) {
+      document.querySelector("#name-" + activePlayer).textContent = "WINNER!!!";
+      document.querySelector(".dice").style.display = "none";
+      document
+        .querySelector(".player-" + activePlayer + "-panel")
+        .classList.add("winner");
+      document
+        .querySelector(".player-" + activePlayer + "-panel")
+        .classList.remove("active");
+      gamePlaying = false;
+    } else {
+      //Next player
+      nextPlayer();
+    }
   }
 });
 
@@ -84,6 +91,7 @@ function init() {
   scores = [0, 0];
   roundScore = 0;
   activePlayer = 0;
+  gamePlaying = true;
 
   //This will hide the dice from the game
   document.querySelector(".dice").style.display = "none";
