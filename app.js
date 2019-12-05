@@ -13,20 +13,10 @@ GAME RULES:
 
 let scores, roundScore, activePlayer;
 
-scores = [0, 0];
-roundScore = 0;
-activePlayer = 0;
+init();
 
-//This will hide the dice from the game
-document.querySelector(".dice").style.display = "none";
+/************************* Event Listener for the roll dice btn **********************/
 
-//Setting the values of the scores to 0
-document.getElementById("score-0").textContent = "0";
-document.getElementById("score-1").textContent = "0";
-document.getElementById("current-0").textContent = "0";
-document.getElementById("current-1").textContent = "0";
-
-function btn() {}
 document.querySelector(".btn-roll").addEventListener("click", function() {
   //1. Random Numnber
   let dice = Math.floor(Math.random() * 6) + 1;
@@ -41,10 +31,73 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
     roundScore += dice;
     document.querySelector("#current-" + activePlayer).textContent = roundScore;
   } else {
-    activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
-    roundScore = 0;
-
-    document.getElementById("current-0").textContent = "0";
-    document.getElementById("current-1").textContent = "0";
+    //next Player
+    nextPlayer();
   }
 });
+
+/************************* Event Listener for the hold btn **********************/
+
+document.querySelector(".btn-hold").addEventListener("click", function() {
+  //Add current score to global score
+  scores[activePlayer] += roundScore;
+
+  //Update the UI
+  document.querySelector("#score-" + activePlayer).textContent =
+    scores[activePlayer];
+
+  //Check if player won the game
+  if (scores[activePlayer] >= 20) {
+    document.querySelector("#name-" + activePlayer).textContent = "WINNER!!!";
+    document.querySelector(".dice").style.display = "none";
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.add("winner");
+    document
+      .querySelector(".player-" + activePlayer + "-panel")
+      .classList.remove("active");
+  } else {
+    //Next player
+    nextPlayer();
+  }
+});
+
+function nextPlayer() {
+  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+  roundScore = 0;
+
+  document.getElementById("current-0").textContent = "0";
+  document.getElementById("current-1").textContent = "0";
+
+  //This will activate the player that is currently playing
+  document.querySelector(".player-0-panel").classList.toggle("active");
+  document.querySelector(".player-1-panel").classList.toggle("active");
+
+  document.querySelector(".dice").style.display = "none";
+}
+
+/**************** Event Listener for the New Game btn ************/
+
+document.querySelector(".btn-new").addEventListener("click", init);
+
+function init() {
+  scores = [0, 0];
+  roundScore = 0;
+  activePlayer = 0;
+
+  //This will hide the dice from the game
+  document.querySelector(".dice").style.display = "none";
+
+  //Setting the values of the scores to 0
+  document.getElementById("score-0").textContent = "0";
+  document.getElementById("score-1").textContent = "0";
+  document.getElementById("current-0").textContent = "0";
+  document.getElementById("current-1").textContent = "0";
+  document.getElementById("name-0").textContent = "Player 1";
+  document.getElementById("name-1").textContent = "Player 2";
+  document.querySelector(".player-0-panel").classList.remove("winner");
+  document.querySelector(".player-1-panel").classList.remove("winner");
+  document.querySelector(".player-0-panel").classList.remove("active");
+  document.querySelector(".player-1-panel").classList.remove("active");
+  document.querySelector(".player-0-panel").classList.add("active");
+}
